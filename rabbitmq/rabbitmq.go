@@ -51,6 +51,13 @@ func NewSubscriberQueue(exchange string) *Rabbitmq {
 	return q
 }
 
+// NewRoutingQueue 路由模式创建队列
+func NewRoutingQueue(exchange, routingKey string) *Rabbitmq {
+	q := NewRabbitMq("", exchange, routingKey)
+	q.Connect()
+	return q
+}
+
 // Connect 连接mq
 func (r *Rabbitmq) Connect() {
 	var err error
