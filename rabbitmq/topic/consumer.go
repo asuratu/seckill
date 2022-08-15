@@ -1,5 +1,5 @@
-// Package routing 路由模式消费者
-package routing
+// Package topic 话题模式消费者
+package topic
 
 import (
 	"log"
@@ -11,7 +11,7 @@ func Consumer(r *rabbitmq.Rabbitmq) {
 	// 尝试创建交换机
 	err := r.Channel.ExchangeDeclare(
 		r.Exchange, // 交换机名称
-		"direct",   // 交换机类型，topic 是路由模式，所有消息都会到达所有的 queue
+		"topic",    // 交换机类型，topic 是话题模式，所有消息都会到达所有的 queue
 		true,       // 是否持久化
 		false,      // 是否自动删除，如果设置为 true，则 queue 和 exchange 会在服务器重启后自动删除
 		false,      // 是否具有排他性，只有当前用户可以访问
@@ -32,7 +32,7 @@ func Consumer(r *rabbitmq.Rabbitmq) {
 	// 绑定队列到交换机
 	err = r.Channel.QueueBind(
 		q.Name,     // 队列名称
-		r.Key,      // routing key
+		r.Key,      // 话题模式的 key 规则：* 用于匹配一个单词，# 用于匹配多个单词（可以是零个），例如：imooc.* 表示匹配 imooc.hello，imooc.# 表示匹配 imooc.hello.world
 		r.Exchange, // exchange
 		false,      // 是否排他性
 		nil,        // 额外属性
